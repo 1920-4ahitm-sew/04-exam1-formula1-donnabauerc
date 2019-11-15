@@ -12,9 +12,10 @@ import javax.persistence.PersistenceContext;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @ApplicationScoped
 public class InitBean {
@@ -45,8 +46,37 @@ public class InitBean {
      * @param racesFileName
      */
     private void readRacesFromFile(String racesFileName) {
+        List<Race> races = new ArrayList<>();
+        boolean temp = false;
         try{
-            BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("races.csv"),
+            BufferedReader br = new BufferedReader(new InputStreamReader(getClass()
+            .getResourceAsStream("/"+racesFileName)));
+            String line;
+            while((line = br.readLine()) != null){
+                String[] attributes = line.split(";");
+                Race race;
+                if(attributes.length == 3 && temp){
+                    race = new Race(Long.parseLong(attributes[0]), attributes[1], LocalDate.parse(attributes[2], formatter));
+                    System.out.println(race.toString());
+                }else{
+                    temp = true;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Einlesen der Datei "teams.csv".
+     * Das String-Array jeder einzelnen Zeile wird der Methode persistTeamAndDrivers(...)
+     * übergeben
+     *
+     * @param teamFileName
+     */
+    private void readTeamsAndDriversFromFile(String teamFileName) {
+        /*try{
+            BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(teamFileName+".csv"),
                     Charset.defaultCharset()));
             br.readLine();
             String line;
@@ -58,19 +88,7 @@ public class InitBean {
             }
         }catch (IOException e){
             e.printStackTrace();
-        }
-
-    }
-
-    /**
-     * Einlesen der Datei "teams.csv".
-     * Das String-Array jeder einzelnen Zeile wird der Methode persistTeamAndDrivers(...)
-     * übergeben
-     *
-     * @param teamFileName
-     */
-    private void readTeamsAndDriversFromFile(String teamFileName) {
-
+        }*/
     }
 
     /**
