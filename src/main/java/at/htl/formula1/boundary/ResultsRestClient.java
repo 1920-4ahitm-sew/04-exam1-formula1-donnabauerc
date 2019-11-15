@@ -1,6 +1,11 @@
 package at.htl.formula1.boundary;
 
+import at.htl.formula1.entity.Driver;
+import at.htl.formula1.entity.Race;
+import at.htl.formula1.entity.Result;
+
 import javax.json.JsonArray;
+import javax.json.JsonValue;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
@@ -52,14 +57,13 @@ public class ResultsRestClient {
      */
     @Transactional
     void persistResult(JsonArray resultsJson) {
-        /*
         for(JsonValue jsonValue : resultsJson){
             String name = jsonValue.asJsonObject().getString("driverFullName");
             int pos = jsonValue.asJsonObject().getInt("position");
             int raceNo = jsonValue.asJsonObject().getInt("raceNo");
-            em.persist(new Result(em.find(Race.class, raceNo),
+            em.persist(new Result(em.find(Race.class, (long) raceNo),
             pos, em.createNamedQuery("Driver.findByName", Driver.class).setParameter("NAME", name).getSingleResult()));
-        }*/
+        }
     }
 
 }
