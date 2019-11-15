@@ -1,32 +1,28 @@
 package at.htl.formula1.control;
 
 import at.htl.formula1.boundary.ResultsRestClient;
-import at.htl.formula1.entity.Driver;
 import at.htl.formula1.entity.Race;
-import at.htl.formula1.entity.Team;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Initialized;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.stream.Stream;
 
 @ApplicationScoped
 public class InitBean {
 
     private static final String TEAM_FILE_NAME = "teams.csv";
     private static final String RACES_FILE_NAME = "races.csv";
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     @PersistenceContext
     EntityManager em;
@@ -49,7 +45,20 @@ public class InitBean {
      * @param racesFileName
      */
     private void readRacesFromFile(String racesFileName) {
+        try{
+            BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("races.csv"),
+                    Charset.defaultCharset()));
+            br.readLine();
+            String line;
 
+            while((line = br.readLine()) != null){
+                String[] row = line.split(";");
+
+                this.em.persist(new Race(Long.parseLong(row[0]), row[1], LocalDate.parse(row[2], formatter)));
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
 
     }
 
