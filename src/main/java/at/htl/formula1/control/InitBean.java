@@ -116,19 +116,20 @@ public class InitBean {
         Driver driver1;
         Driver driver2;
 
-        if((team = em.createNamedQuery("Team.getByName", Team.class)
+        /*if((team = em.createNamedQuery("Team.getByName", Team.class)
                 .setParameter("NAME", line[0]).getSingleResult()) != null){
             driver1 = new Driver(line[1], team);
             driver2 = new Driver(line[2], team);
         }else{
             team = new Team(line[0]);
             em.persist(team);
+
             driver1 = new Driver(line[1], team);
             driver2 = new Driver(line[2], team);
         }
 
         this.em.persist(driver1);
-        this.em.persist(driver2);
+        this.em.persist(driver2);*/
     }
 
 
