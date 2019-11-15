@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
+@Transactional
 public class InitBean {
 
     private static final String TEAM_FILE_NAME = "teams.csv";
@@ -49,7 +50,6 @@ public class InitBean {
      * @param racesFileName
      */
 
-    @Transactional
     private void readRacesFromFile(String racesFileName) {
         List<Race> races = new ArrayList<>();
         boolean temp = false;
@@ -62,7 +62,7 @@ public class InitBean {
                 Race race;
                 if(attributes.length == 3 && temp){
                     race = new Race(Long.parseLong(attributes[0]), attributes[1], LocalDate.parse(attributes[2], formatter));
-                    //this.em.persist(race);
+                    this.em.persist(race);
                 }else{
                     temp = true;
                 }
@@ -113,11 +113,11 @@ public class InitBean {
      */
     @Transactional
     private void persistTeamAndDrivers(String[] line) {
-        Team team;
+       /* Team team;
         Driver driver1;
         Driver driver2;
 
-        /*if((team = em.createNamedQuery("Team.getByName", Team.class)
+        if((team = em.createNamedQuery("Team.getByName", Team.class)
                 .setParameter("NAME", line[0]).getSingleResult()) != null){
             driver1 = new Driver(line[1], team);
             driver2 = new Driver(line[2], team);
@@ -129,8 +129,9 @@ public class InitBean {
             driver2 = new Driver(line[2], team);
         }
 
-        this.em.persist(driver1);
-        this.em.persist(driver2);*/
+        em.persist(driver1);
+        em.persist(driver2);
+    */
     }
 
 

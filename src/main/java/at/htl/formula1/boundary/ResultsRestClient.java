@@ -1,20 +1,11 @@
 package at.htl.formula1.boundary;
 
-import at.htl.formula1.entity.Driver;
-import at.htl.formula1.entity.Race;
-import at.htl.formula1.entity.Result;
-
 import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonValue;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 public class ResultsRestClient {
 
@@ -22,6 +13,9 @@ public class ResultsRestClient {
     public static final String RESULTS_ENDPOINT = "http://vm90.htl-leonding.ac.at/results";
     private Client client;
     private WebTarget target;
+
+    @PersistenceContext
+    EntityManager em;
 
     /**
      * Vom RestEndpoint werden alle Result abgeholt und in ein JsonArray gespeichert.
@@ -55,7 +49,13 @@ public class ResultsRestClient {
      */
     @Transactional
     void persistResult(JsonArray resultsJson) {
-
+//        for(JsonValue jsonValue : resultsJson){
+//            String name = jsonValue.asJsonObject().getString("driverFullName");
+//            int pos = jsonValue.asJsonObject().getInt("position");
+//            int raceNo = jsonValue.asJsonObject().getInt("raceNo");
+//            em.persist(new Result(em.find(Race.class, raceNo),
+//            pos, em.createNamedQuery("Driver.findByName", Driver.class).setParameter("NAME", name).getSingleResult()));
+//        }
     }
 
 }

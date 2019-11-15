@@ -8,7 +8,7 @@ import javax.persistence.*;
  * The id's are assigned by the database.
  */
 @Entity
-@Table(name = "FI_TEAM")
+@Table(name = "F1_TEAM")
 @NamedQueries({
         @NamedQuery(
                 name = "Team.getByName",
