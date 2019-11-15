@@ -1,7 +1,9 @@
 package at.htl.formula1.control;
 
 import at.htl.formula1.boundary.ResultsRestClient;
+import at.htl.formula1.entity.Driver;
 import at.htl.formula1.entity.Race;
+import at.htl.formula1.entity.Team;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Initialized;
@@ -45,6 +47,7 @@ public class InitBean {
      *
      * @param racesFileName
      */
+
     private void readRacesFromFile(String racesFileName) {
         List<Race> races = new ArrayList<>();
         boolean temp = false;
@@ -57,7 +60,7 @@ public class InitBean {
                 Race race;
                 if(attributes.length == 3 && temp){
                     race = new Race(Long.parseLong(attributes[0]), attributes[1], LocalDate.parse(attributes[2], formatter));
-                    System.out.println(race.toString());
+                    //this.em.persist(race);
                 }else{
                     temp = true;
                 }
@@ -75,20 +78,34 @@ public class InitBean {
      * @param teamFileName
      */
     private void readTeamsAndDriversFromFile(String teamFileName) {
-        /*try{
-            BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(teamFileName+".csv"),
-                    Charset.defaultCharset()));
-            br.readLine();
+        List<Team> teams = new ArrayList<>();
+        List<Driver> drivers = new ArrayList<>();
+        boolean temp = false;
+
+        try{
+            BufferedReader br = new BufferedReader(new InputStreamReader(getClass()
+                    .getResourceAsStream("/"+teamFileName)));
             String line;
-
             while((line = br.readLine()) != null){
-                String[] row = line.split(";");
+                String[] attributes = line.split(";");
+                Team team;
+                Driver driver1;
+                Driver driver2;
+                if(attributes.length == 3 && temp){
+                    team = new Team(attributes[0]);
+                    driver1 = new Driver(attributes[1], team);
+                    driver2 = new Driver(attributes[2], team);
 
-                this.em.persist(new Race(Long.parseLong(row[0]), row[1], LocalDate.parse(row[2], formatter)));
+                    /*this.em.persist(team);
+                    this.em.persist(driver1);
+                    this.em.persist(driver2);*/
+                }else{
+                    temp = true;
+                }
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     /**
