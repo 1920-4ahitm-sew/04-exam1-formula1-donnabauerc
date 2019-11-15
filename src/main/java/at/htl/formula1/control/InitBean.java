@@ -113,7 +113,8 @@ public class InitBean {
      */
     @Transactional
     private void persistTeamAndDrivers(String[] line) {
-       /* Team team;
+        /*
+        Team team;
         Driver driver1;
         Driver driver2;
 
@@ -131,7 +132,7 @@ public class InitBean {
 
         em.persist(driver1);
         em.persist(driver2);
-    */
+        */
     }
 
 
