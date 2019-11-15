@@ -10,6 +10,7 @@ import javax.enterprise.context.Initialized;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.io.BufferedReader;
@@ -113,26 +114,27 @@ public class InitBean {
      */
     @Transactional
     private void persistTeamAndDrivers(String[] line) {
-        /*
-        Team team;
+
+        Team team = null;
         Driver driver1;
         Driver driver2;
 
-        if((team = em.createNamedQuery("Team.getByName", Team.class)
-                .setParameter("NAME", line[0]).getSingleResult()) != null){
-            driver1 = new Driver(line[1], team);
-            driver2 = new Driver(line[2], team);
-        }else{
+        try {
+            team = em
+                    .createNamedQuery("Team.getByName", Team.class)
+                    .setParameter("NAME", line[0])
+                    .getSingleResult();
+        } catch (NoResultException e) {
             team = new Team(line[0]);
             em.persist(team);
-
-            driver1 = new Driver(line[1], team);
-            driver2 = new Driver(line[2], team);
         }
+
+        driver1 = new Driver(line[1], team);
+        driver2 = new Driver(line[2], team);
 
         em.persist(driver1);
         em.persist(driver2);
-        */
+
     }
 
 
