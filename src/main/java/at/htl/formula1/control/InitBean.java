@@ -50,7 +50,7 @@ public class InitBean {
      *
      * @param racesFileName
      */
-
+    @Transactional
     private void readRacesFromFile(String racesFileName) {
         List<Race> races = new ArrayList<>();
         boolean temp = false;
