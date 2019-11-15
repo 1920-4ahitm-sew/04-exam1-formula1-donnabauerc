@@ -11,6 +11,7 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -88,17 +89,8 @@ public class InitBean {
             String line;
             while((line = br.readLine()) != null){
                 String[] attributes = line.split(";");
-                Team team;
-                Driver driver1;
-                Driver driver2;
                 if(attributes.length == 3 && temp){
-                    team = new Team(attributes[0]);
-                    driver1 = new Driver(attributes[1], team);
-                    driver2 = new Driver(attributes[2], team);
-
-                    /*this.em.persist(team);
-                    this.em.persist(driver1);
-                    this.em.persist(driver2);*/
+                    persistTeamAndDrivers(attributes);
                 }else{
                     temp = true;
                 }
@@ -118,9 +110,25 @@ public class InitBean {
      *
      * @param line String-Array mit den einzelnen Werten der csv-Datei
      */
-
+    @Transactional
     private void persistTeamAndDrivers(String[] line) {
+        Team team;
+        Driver driver1;
+        Driver driver2;
 
+        if((team = em.createNamedQuery("Team.getByName", Team.class)
+                .setParameter("NAME", line[0]).getSingleResult()) != null){
+            driver1 = new Driver(line[1], team);
+            driver2 = new Driver(line[2], team);
+        }else{
+            team = new Team(line[0]);
+            em.persist(team);
+            driver1 = new Driver(line[1], team);
+            driver2 = new Driver(line[2], team);
+        }
+
+        this.em.persist(driver1);
+        this.em.persist(driver2);
     }
 
 
