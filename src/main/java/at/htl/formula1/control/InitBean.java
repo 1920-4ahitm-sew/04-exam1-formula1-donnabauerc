@@ -16,6 +16,7 @@ import javax.transaction.Transactional;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class InitBean {
         boolean temp = false;
         try{
             BufferedReader br = new BufferedReader(new InputStreamReader(getClass()
-            .getResourceAsStream("/"+racesFileName)));
+            .getResourceAsStream("/"+racesFileName), StandardCharsets.UTF_8));
             String line;
             while((line = br.readLine()) != null){
                 String[] attributes = line.split(";");
@@ -87,7 +88,7 @@ public class InitBean {
 
         try{
             BufferedReader br = new BufferedReader(new InputStreamReader(getClass()
-                    .getResourceAsStream("/"+teamFileName)));
+                    .getResourceAsStream("/"+teamFileName), StandardCharsets.UTF_8));
             String line;
             while((line = br.readLine()) != null){
                 String[] attributes = line.split(";");

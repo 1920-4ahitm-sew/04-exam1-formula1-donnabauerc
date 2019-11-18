@@ -1,0 +1,28 @@
+= Verbesserung Donnabauer:
+
+== Init Bean:
+
+* Falscher Code:
+....
+BufferedReader br = new BufferedReader(new InputStreamReader(getClass()
+    .getResourceAsStream("/"+teamFileName)));
+....
+* Fehler: Es wird kein Zeichensatz angegeben -> Umlaute in Namen werden problematisch
+* Richtiger Code:
+....
+BufferedReader br = new BufferedReader(new InputStreamReader(getClass()
+    .getResourceAsStream("/"+teamFileName), StandardCharsets.UTF_8));
+....
+
+== Result:
+* Falscher Code:
+....
+@Table
+....
+* Fehler: Tabelle hat keinen Namen
+* Richtiger Code:
+....
+@Table(name = "F1_RESULT")
+....
+
+==
