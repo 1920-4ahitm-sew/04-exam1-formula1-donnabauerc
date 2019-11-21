@@ -1,6 +1,6 @@
 = Verbesserung Donnabauer:
 
-== Init Bean:
+== InitBean:
 
 * Falscher Code:
 ....
@@ -19,10 +19,72 @@ BufferedReader br = new BufferedReader(new InputStreamReader(getClass()
 ....
 @Table
 ....
-* Fehler: Tabelle hat keinen Namen
+* Fehler: Tabelle hat keinen Namen, Named Queries fehlen komplett da ich die anderen Aufgaben nicht gemacht habe
 * Richtiger Code:
 ....
 @Table(name = "F1_RESULT")
+@NamedQueries({
+        @NamedQuery(
+                name = "Result.sumPointsForDriver",
+                query = "select sum(r.points) from Result r where r.driver.name = :NAME"
+        ),
+        @NamedQuery(
+                name = "Result.sumPointsForAllDrivers",
+                query = "select r.driver.name, sum(r.points) from Result r group by r.driver.name"
+        )
+})
 ....
 
-==
+== ResultsRestClient:
+* Falscher Code:
+* Fehler: Klasse Result hat falsche @Table Annotation
+* Richtiger Code:
+
+== ResultsEndpoint:
+* Falscher Code:
+* Fehler: Ich persönlich habe mich zu wenig damit auseinandergesetzt
+* Richtiger Code:
+....
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public JsonObject getPointsSumOfDriver(
+            @QueryParam("name") String name
+    ) {
+        Long points = em
+                .createNamedQuery("Result.sumPointsForDriver", Long.class)
+                .setParameter("NAME", name)
+                .getSingleResult();
+
+        Driver driver = em
+                .createNamedQuery("Driver.findByName", Driver.class)
+                .setParameter("NAME", name)
+                .getSingleResult();
+
+        return Json
+                .createObjectBuilder()
+                .add("driver", driver.getName())
+                .add("points", points)
+                .build();
+    }
+
+    @GET
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findWinnerOfRace(@PathParam("id") long id) {
+        return null;
+    }
+
+    @GET
+    @Path("all")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPointsSumOfAllDrivers() {
+        List<Object[]> elements = em
+                .createNamedQuery("Result.sumPointsForAllDrivers", Object[].class)
+                .getResultList();
+
+        return Response.ok(elements).build();
+    }
+
+}
+
+....
